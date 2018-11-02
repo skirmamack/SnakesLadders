@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SnakesLadders.Dice;
 
 namespace SnakesLadders
 {
@@ -6,8 +7,14 @@ namespace SnakesLadders
     {
         private const int MaxSquareNumber = 100;
 
+        private readonly IDiceNumberValidator _diceNumberValidator;
         private int _tokenSquareNumber;
         private Token _token;
+
+        public Game(IDiceNumberValidator diceNumberValidator)
+        {
+            _diceNumberValidator = diceNumberValidator;
+        }
 
         public void AddToken(Token token)
         {
@@ -21,6 +28,8 @@ namespace SnakesLadders
 
         public void MoveToken(Token token, int diceNumber)
         {
+            _diceNumberValidator.Validate(diceNumber);
+
             var newSquareNumber = _tokenSquareNumber + diceNumber;
 
             if (newSquareNumber > MaxSquareNumber) return;

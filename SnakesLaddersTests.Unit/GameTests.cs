@@ -1,17 +1,22 @@
-﻿using NUnit.Framework;
+﻿using System;
+using Moq;
+using NUnit.Framework;
 using SnakesLadders;
+using SnakesLadders.Dice;
 
 namespace SnakesLaddersTests.Unit
 {
     [TestFixture]
     public class GameTests
     {
+        private Mock<IDiceNumberValidator> _diceNumberValidator;
         private Game _game;
 
         [SetUp]
         public void SetUp()
         {
-            _game = new Game();
+            _diceNumberValidator = new Mock<IDiceNumberValidator>();
+            _game = new Game(_diceNumberValidator.Object);
         }
 
         [Test]
@@ -118,6 +123,26 @@ namespace SnakesLaddersTests.Unit
             CollectionAssert.IsEmpty(winnerTokens);
         }
 
+        [Test]
+        public void MoveToken_ShouldThrow_When_DiceValidatorThrows()
+        {
+            var diceValidationException = new Exception();
+
+            var token = new Token("Ski");
+            _game.AddToken(token);
+
+            _diceNumberValidator
+                .Setup(validator => validator.Validate(It.IsAny<int>()))
+                .Throws(diceValidationException);
+
+            //Given game is started
+            _game.Start();
+
+            //Player requests to move with throwing dice validation
+            var exception = Assert.Throws<Exception>(() => _game.MoveToken(token, 3));
+
+            Assert.That(exception, Is.Not.Null);
+        }
         protected void MoveTokenToSquareNumber(Token token, int squareNumber)
         {
             while (_game.GetTokenSquareNumber() < squareNumber)
