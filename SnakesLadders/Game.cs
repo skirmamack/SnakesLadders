@@ -15,6 +15,12 @@
             _tokenSquareNumber = 1;
         }
 
+        public void MoveToken(Token token, int diceNumber)
+        {
+            var newSquareNumber = _tokenSquareNumber + diceNumber;
+            _tokenSquareNumber = newSquareNumber;
+        }
+
         public int GetTokenSquareNumber()
         {
             return _tokenSquareNumber;
