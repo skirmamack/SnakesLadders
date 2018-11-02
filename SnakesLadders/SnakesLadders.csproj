@@ -39,6 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dice\DiceNumberValidator.cs" />
+    <Compile Include="Dice\IDiceNumberValidator.cs" />
+    <Compile Include="Exceptions\InvalidDiceNumberException.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Token.cs" />
